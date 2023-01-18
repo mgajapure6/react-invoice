@@ -5,110 +5,116 @@ interface Props {
     callback?: (type: string, data: any) => void;
 }
 
-interface State { }
+interface State {
+    menus: any[]
+}
+
+const GlobalMenus = [
+    {
+        name: "Dashboard",
+        icon: "bi-bar-chart",
+        link: "",
+        srno: 1
+    },
+    {
+        name: "Inventory",
+        icon: "bi-boxes",
+        link: "",
+        srno: 2,
+        subMenu: [
+            {
+                name: "Products",
+                icon: null,
+                link: "",
+                srno: 1,
+            },
+            {
+                name: "Add Product",
+                icon: null,
+                link: "",
+                srno: 2
+            }
+        ],
+        
+    }
+]
 
 export class AppSidebar extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            menus: GlobalMenus.sort((a, b) => a.srno - b.srno)
+        };
     }
 
     render() {
-        return (<div className={`app-sidebar border-r ${this.props.sidebarCollapse ? 'd-none' : ''}`}>
-            <div className='app-brand border-b p-3'>Brand</div>
-            <div className="sidebar-menu-list accordion accordion-flush">
-                <div className="accordion-item">
-                    <h2 className="accordion-header lvl-1" id="flush-headingOne">
-                        <button className="accordion-button no-lvl" type="button">
-                            <i className='bi-12 bi-bar-chart me-3'></i>Dashboard
-                        </button>
-                    </h2>
+        return (
+            <div className={`app-sidebar border-r ${this.props.sidebarCollapse ? 'd-none' : ''}`}>
+                <div className='app-brand border-b p-3'>Brand</div>
+                <div className="sidebar-menu-list accordion accordion-flush">
+                    {
+                        this.state.menus ?
+                            this.state.menus.map((menu, idx_l1) => {
+                                let hasSubMenuL1 = menu.subMenu && menu.subMenu.length > 0 ? true : false
+                                return (
+                                    <div className="accordion-item">
+                                        <h2 className="accordion-header lvl-1">
+                                            <button className={`accordion-button collapsed ${!hasSubMenuL1 ? 'no-lvl' : ''}`}
+                                                type="button"
+                                                data-bs-toggle={`${!hasSubMenuL1 ? '' : 'collapse'}`}
+                                                data-bs-target={`${!hasSubMenuL1 ? '' : 'menu-collapse-' + idx_l1 + menu.srno}`}>
+                                                <i className={`bi-12 me-3 ${menu.icon}`}></i>{menu.name}
+                                            </button>
+                                        </h2>
+                                        {
+                                            hasSubMenuL1 ?
+                                                <div id={'menu-collapse-' + idx_l1 + menu.srno} className="accordion-collapse collapse">
+                                                    {
+                                                        menu.subMenu.map((subMenu: any, idx_l2: number) => {
+                                                            let hasSubMenuL2 = subMenu.subMenu && subMenu.subMenu.length > 0 ? true : false
+                                                            return (
+                                                                <div className="accordion-item">
+                                                                    <h2 className="accordion-header lvl-2">
+                                                                        <button className={`accordion-button collapsed ${!hasSubMenuL2 ? 'no-lvl' : ''}`}
+                                                                            type="button"
+                                                                            data-bs-toggle={`${!hasSubMenuL2 ? '' : 'collapse'}`}
+                                                                            data-bs-target={`${!hasSubMenuL2 ? '' : 'sub-menu-collapse-' + menu.srno + subMenu.srno}`}>
+                                                                            <i className={`bi-12 me-3 ${subMenu.icon}`}></i>{subMenu.name}
+                                                                        </button>
+                                                                    </h2>
+                                                                    {
+                                                                        hasSubMenuL2 ?
+                                                                            <div id={'sub-menu-collapse-' + menu.srno + subMenu.srno} className="accordion-collapse collapse">
+                                                                                {
+                                                                                    subMenu.subMenu.map((subSubMenu: any, idx_l3: number) => {
+                                                                                        let hasSubMenuL3 = subSubMenu.subMenu && subSubMenu.subMenu.length > 0 ? true : false
+                                                                                        return (
+                                                                                            <div className="accordion-item">
+                                                                                                <h2 className="accordion-header lvl-3">
+                                                                                                    <button className={`accordion-button collapsed no-lvl`} type="button">
+                                                                                                        <i className={`bi-12 me-3 ${subSubMenu.icon}`}></i>{subSubMenu.name}
+                                                                                                    </button>
+                                                                                                </h2>
+                                                                                            </div>
+                                                                                        )
+                                                                                    })
+                                                                                }
+                                                                            </div>
+                                                                            : ''
+                                                                    }
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                                : ''
+                                        }
+                                    </div>
+                                )
+                            })
+                            : ''
+                    }
                 </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header lvl-1" id="flush-headingOne">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
-                        <i className='bi-12 bi-boxes me-3'></i>Inventory
-                        </button>
-                    </h2>
-                    <div id="flush-collapseOne" className="accordion-collapse collapse">
-                        <div className="accordion-item">
-                            <h2 className="accordion-header lvl-2" id="flush-headingOne">
-                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOneOne">
-                                    Item 1
-                                </button>
-                            </h2>
-                            <div id="flush-collapseOneOne" className="accordion-collapse collapse">
-                                <div className="accordion-body lvl-3">
-                                    A Item
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header" id="flush-headingTwo">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo">
-                        <i className='bi-12 bi-cart-check me-3'></i>Sales
-                        </button>
-                    </h2>
-                    <div id="flush-collapseTwo" className="accordion-collapse collapse">
-                        <div className="accordion-item">
-                            <h2 className="accordion-header" id="flush-headingTwo">
-                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwoTwo">
-                                    Item #1
-                                </button>
-                            </h2>
-                            <div id="flush-collapseTwoTwo" className="accordion-collapse collapse">
-                                <div className="accordion-body">
-                                    A Item
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree">
-                        <i className='bi-12 bi-cart-plus me-3'></i>Purchase
-                        </button>
-                    </h2>
-                    <div id="flush-collapseThree" className="accordion-collapse collapse">
-                        <div className="accordion-item">
-                            <h2 className="accordion-header" id="flush-headingThree">
-                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThreeThree">
-                                    Item #1
-                                </button>
-                            </h2>
-                            <div id="flush-collapseThreeThree" className="accordion-collapse collapse">
-                                <div className="accordion-body">
-                                    A Item
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour">
-                        <i className='bi-12 bi-clipboard2-data me-3'></i>Reports
-                        </button>
-                    </h2>
-                    <div id="flush-collapseFour" className="accordion-collapse collapse">
-                        <div className="accordion-item">
-                            <h2 className="accordion-header" id="flush-headingFour">
-                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFourFour">
-                                    Item 1
-                                </button>
-                            </h2>
-                            <div id="flush-collapseFourFour" className="accordion-collapse collapse">
-                                <div className="accordion-body">
-                                    A Item
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>)
+            </div>)
     }
 }
