@@ -36,6 +36,7 @@ $app-sidebar-width: 255px;
   width: 100%;
 
   .app-header-menus {
+    height: $app-header-height;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -93,6 +94,7 @@ $app-sidebar-width: 255px;
   position: absolute;
   bottom: 0;
   width: 100%;
+  background: #fff;
 }
 
 .app-backdrop {

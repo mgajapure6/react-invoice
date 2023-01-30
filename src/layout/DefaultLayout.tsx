@@ -4,7 +4,6 @@ import { AppFooter } from './components/AppFooter';
 import { AppHeader } from './components/AppHeader';
 import { AppSidebar } from './components/AppSidebar';
 import StoreService from '../services/StoreService';
-import { Container } from 'semantic-ui-react';
 
 interface Props { }
 

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { NavDropdown } from 'react-bootstrap';
-import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon';
 import StoreService from '../../services/StoreService';
 
 interface Props {
